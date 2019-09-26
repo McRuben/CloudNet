@@ -177,8 +177,7 @@ public final class BukkitListener implements Listener {
             CloudServer.getInstance().getGroupData().getPercentForNewServerAutomatically() > 0) {
             CloudAPI.getInstance().startGameServer(CloudServer.getInstance().getGroupData(),
                 new ServerConfig(false, "null", new Document(), System.currentTimeMillis()),
-                true,
-                CloudServer.getInstance().getTemplate());
+                true, CloudServer.getInstance().getTemplate());
             CloudServer.getInstance().setAllowAutoStart(false);
 
             Bukkit.getScheduler().runTaskLater(CloudServer.getInstance().getPlugin(),

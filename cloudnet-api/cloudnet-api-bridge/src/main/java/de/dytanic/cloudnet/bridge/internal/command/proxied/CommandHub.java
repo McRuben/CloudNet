@@ -39,23 +39,20 @@ public final class CommandHub extends Command {
             .getName());
 
         if (serverInfo != null) {
-            if (CloudProxy.getInstance().getProxyGroup().getProxyConfig().getDynamicFallback().getNamedFallbackes().contains(serverInfo
-                .getServiceId()
-                .getGroup())) {
+            if (CloudProxy.getInstance().getProxyGroup().getProxyConfig().getDynamicFallback().getNamedFallbackes()
+                .contains(serverInfo.getServiceId().getGroup())) {
                 commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&', CloudAPI.getInstance().getCloudNetwork().getMessages()
                     .getString("hub-already")));
                 return;
             }
         }
 
-        String fallback = CloudProxy.getInstance().fallbackOnEnabledKick((((ProxiedPlayer) commandSender)),
+        String fallback = CloudProxy.getInstance().fallbackOnEnabledKick(((ProxiedPlayer) commandSender),
             CloudAPI.getInstance().getGroup(),
             ((ProxiedPlayer) commandSender).getServer().getInfo().getName());
 
         final ProxiedPlayerFallbackEvent proxiedPlayerFallbackEvent = new ProxiedPlayerFallbackEvent((ProxiedPlayer) commandSender,
-            CloudAPI.getInstance()
-                .getOnlinePlayer(((ProxiedPlayer) commandSender)
-                    .getUniqueId()),
+            CloudAPI.getInstance().getOnlinePlayer(((ProxiedPlayer) commandSender).getUniqueId()),
             ProxiedPlayerFallbackEvent.FallbackType.HUB_COMMAND,
             fallback);
 

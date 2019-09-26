@@ -11,6 +11,7 @@
       <option name="PACKAGES_TO_USE_IMPORT_ON_DEMAND">
         <value />
       </option>
+      <option name="ENABLE_JAVADOC_FORMATTING" value="false" />
       <option name="JD_ADD_BLANK_AFTER_PARM_COMMENTS" value="true" />
       <option name="JD_ADD_BLANK_AFTER_RETURN" value="true" />
     </JavaCodeStyleSettings>
