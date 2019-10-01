@@ -68,32 +68,25 @@ public class PacketInMobSelector extends PacketInHandlerDefault {
                         @Override
                         public MobSelector.MobImpl doCatch(final ServerMob key) {
                             MobSelector.getInstance().toLocation(key.getPosition()).getChunk().load();
-                            final Entity entity = MobSelector.getInstance().toLocation(key.getPosition()).getWorld().spawnEntity(MobSelector
-                                    .getInstance()
-                                    .toLocation(
-                                        key.getPosition()),
-                                EntityType
-                                    .valueOf(
-                                        key.getType()));
+                            final Entity entity = MobSelector.getInstance().toLocation(key.getPosition()).getWorld().spawnEntity(
+                                MobSelector.getInstance().toLocation(key.getPosition()),
+                                EntityType.valueOf(key.getType()));
                             entity.setFireTicks(0);
-                            final Object armorStand = ReflectionUtil.armorstandCreation(MobSelector.getInstance()
-                                    .toLocation(key.getPosition()),
+                            final Entity armorStand = ReflectionUtil.armorstandCreation(
+                                MobSelector.getInstance().toLocation(key.getPosition()),
                                 entity,
                                 key);
 
-                            if (armorStand != null) {
-                                MobSelector.getInstance().updateCustom(key, armorStand);
-                                final Entity armor = (Entity) armorStand;
-                                if (armor.getPassenger() == null && key.getItemId() != null) {
+                            MobSelector.getInstance().updateCustom(key, armorStand);
+                            if (armorStand.getPassenger() == null && key.getItemId() != null) {
 
-                                    final Material material = ItemStackBuilder.getMaterialIgnoreVersion(key.getItemName(), key.getItemId());
-                                    if (material != null) {
-                                        final Item item = Bukkit.getWorld(key.getPosition().getWorld()).dropItem(armor.getLocation(),
-                                            new ItemStack(material));
-                                        item.setTicksLived(Integer.MAX_VALUE);
-                                        item.setPickupDelay(Integer.MAX_VALUE);
-                                        armor.setPassenger(item);
-                                    }
+                                final Material material = ItemStackBuilder.getMaterialIgnoreVersion(key.getItemName(), key.getItemId());
+                                if (material != null) {
+                                    final Item item = Bukkit.getWorld(key.getPosition().getWorld()).dropItem(armorStand.getLocation(),
+                                        new ItemStack(material));
+                                    item.setTicksLived(Integer.MAX_VALUE);
+                                    item.setPickupDelay(Integer.MAX_VALUE);
+                                    armorStand.setPassenger(item);
                                 }
                             }
 
@@ -140,30 +133,23 @@ public class PacketInMobSelector extends PacketInHandlerDefault {
                         @Override
                         public MobSelector.MobImpl doCatch(final ServerMob key) {
                             MobSelector.getInstance().toLocation(key.getPosition()).getChunk().load();
-                            final Entity entity = MobSelector.getInstance().toLocation(key.getPosition()).getWorld().spawnEntity(MobSelector
-                                    .getInstance()
-                                    .toLocation(
-                                        key.getPosition()),
-                                EntityType
-                                    .valueOf(
-                                        key.getType()));
-                            final Object armorStand = ReflectionUtil.armorstandCreation(MobSelector.getInstance()
-                                    .toLocation(key.getPosition()),
+                            final Entity entity = MobSelector.getInstance().toLocation(key.getPosition()).getWorld().spawnEntity(
+                                MobSelector.getInstance().toLocation(key.getPosition()),
+                                EntityType.valueOf(key.getType()));
+                            final Entity armorStand = ReflectionUtil.armorstandCreation(
+                                MobSelector.getInstance().toLocation(key.getPosition()),
                                 entity,
                                 key);
 
-                            if (armorStand != null) {
-                                MobSelector.getInstance().updateCustom(key, armorStand);
-                                final Entity armor = (Entity) armorStand;
-                                if (armor.getPassenger() == null && key.getItemId() != null) {
-                                    final Material material = ItemStackBuilder.getMaterialIgnoreVersion(key.getItemName(), key.getItemId());
-                                    if (material != null) {
-                                        final Item item = Bukkit.getWorld(key.getPosition().getWorld()).dropItem(armor.getLocation(),
-                                            new ItemStack(material));
-                                        item.setTicksLived(Integer.MAX_VALUE);
-                                        item.setPickupDelay(Integer.MAX_VALUE);
-                                        armor.setPassenger(item);
-                                    }
+                            MobSelector.getInstance().updateCustom(key, armorStand);
+                            if (armorStand.getPassenger() == null && key.getItemId() != null) {
+                                final Material material = ItemStackBuilder.getMaterialIgnoreVersion(key.getItemName(), key.getItemId());
+                                if (material != null) {
+                                    final Item item = Bukkit.getWorld(key.getPosition().getWorld()).dropItem(armorStand.getLocation(),
+                                        new ItemStack(material));
+                                    item.setTicksLived(Integer.MAX_VALUE);
+                                    item.setPickupDelay(Integer.MAX_VALUE);
+                                    armorStand.setPassenger(item);
                                 }
                             }
 

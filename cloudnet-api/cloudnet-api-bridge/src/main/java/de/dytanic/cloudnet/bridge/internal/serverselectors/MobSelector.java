@@ -242,15 +242,11 @@ public final class MobSelector {
     public void shutdown() {
         for (final MobImpl mobImpl : this.mobs.values()) {
             if (mobImpl.displayMessage != null) {
-                try {
-                    final Entity entity = (Entity) mobImpl.displayMessage;
-                    if (entity.getPassenger() != null) {
-                        entity.getPassenger().remove();
-                    }
-                    mobImpl.displayMessage.getClass().getMethod("remove").invoke(mobImpl.displayMessage);
-                } catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                    e.printStackTrace();
+                final Entity entity = mobImpl.displayMessage;
+                if (entity.getPassenger() != null) {
+                    entity.getPassenger().remove();
                 }
+                mobImpl.displayMessage.remove();
             }
             mobImpl.entity.remove();
         }
@@ -366,14 +362,14 @@ public final class MobSelector {
 
         private Map<Integer, String> serverPosition;
 
-        private Object displayMessage;
+        private Entity displayMessage;
 
         public MobImpl(final UUID uniqueId,
                        final ServerMob mob,
                        final Entity entity,
                        final Inventory inventory,
                        final Map<Integer, String> serverPosition,
-                       final Object displayMessage) {
+                       final Entity displayMessage) {
             this.uniqueId = uniqueId;
             this.mob = mob;
             this.entity = entity;
@@ -414,11 +410,11 @@ public final class MobSelector {
             this.serverPosition = serverPosition;
         }
 
-        public Object getDisplayMessage() {
+        public Entity getDisplayMessage() {
             return displayMessage;
         }
 
-        public void setDisplayMessage(final Object displayMessage) {
+        public void setDisplayMessage(final Entity displayMessage) {
             this.displayMessage = displayMessage;
         }
 
@@ -569,22 +565,21 @@ public final class MobSelector {
                                 EntityType
                                     .valueOf(
                                         key.getType()));
-                            final Object armorStand = ReflectionUtil.armorstandCreation(MobSelector.getInstance()
-                                    .toLocation(key.getPosition()),
+                            final Entity armorStand = ReflectionUtil.armorstandCreation(MobSelector.getInstance()
+                                                                                                   .toLocation(key.getPosition()),
                                 entity,
                                 key);
 
                             if (armorStand != null) {
                                 MobSelector.getInstance().updateCustom(key, armorStand);
-                                final Entity armor = (Entity) armorStand;
-                                if (armor.getPassenger() == null && key.getItemId() != null) {
+                                if (armorStand.getPassenger() == null && key.getItemId() != null) {
                                     final Material material = ItemStackBuilder.getMaterialIgnoreVersion(key.getItemName(), key.getItemId());
                                     if (material != null) {
-                                        final Item item = Bukkit.getWorld(key.getPosition().getWorld()).dropItem(armor.getLocation(),
+                                        final Item item = Bukkit.getWorld(key.getPosition().getWorld()).dropItem(armorStand.getLocation(),
                                             new ItemStack(material));
                                         item.setPickupDelay(Integer.MAX_VALUE);
                                         item.setTicksLived(Integer.MAX_VALUE);
-                                        armor.setPassenger(item);
+                                        armorStand.setPassenger(item);
                                     }
                                 }
                             }
