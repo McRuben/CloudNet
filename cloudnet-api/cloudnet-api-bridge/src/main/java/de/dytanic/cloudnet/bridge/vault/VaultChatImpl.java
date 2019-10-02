@@ -1,6 +1,7 @@
 package de.dytanic.cloudnet.bridge.vault;
 
 import de.dytanic.cloudnet.api.CloudAPI;
+import de.dytanic.cloudnet.api.player.PermissionProvider;
 import de.dytanic.cloudnet.bridge.CloudServer;
 import de.dytanic.cloudnet.lib.player.OfflinePlayer;
 import de.dytanic.cloudnet.lib.player.permission.PermissionGroup;
@@ -27,38 +28,43 @@ public class VaultChatImpl extends Chat {
     }
 
     @Override
-    public String getPlayerPrefix(final String s, final String s1) {
-        final OfflinePlayer offlinePlayer = getPlayer(s1);
-        return offlinePlayer.getPermissionEntity().getPrefix() != null
-               ? offlinePlayer.getPermissionEntity().getPrefix()
-               : offlinePlayer.getPermissionEntity().getHighestPermissionGroup(CloudAPI.getInstance().getPermissionPool()).getPrefix();
+    public String getPlayerPrefix(final String world, final String player) {
+        final OfflinePlayer offlinePlayer = getPlayer(player);
+        if (offlinePlayer.getPermissionEntity().getPrefix() != null) {
+            return offlinePlayer.getPermissionEntity().getPrefix();
+        } else {
+            // Get prefix from highest permission group
+            return PermissionProvider.getPrefix(offlinePlayer);
+        }
     }
 
     @Override
-    public void setPlayerPrefix(final String s, final String s1, final String s2) {
-        final OfflinePlayer offlinePlayer = getPlayer(s1);
-        offlinePlayer.getPermissionEntity().setPrefix(s2);
+    public void setPlayerPrefix(final String world, final String player, final String prefix) {
+        final OfflinePlayer offlinePlayer = getPlayer(player);
+        offlinePlayer.getPermissionEntity().setPrefix(prefix);
         update(offlinePlayer);
     }
 
     @Override
-    public String getPlayerSuffix(final String s, final String s1) {
-        final OfflinePlayer offlinePlayer = getPlayer(s1);
-        return offlinePlayer.getPermissionEntity().getSuffix() != null
-               ? offlinePlayer.getPermissionEntity().getSuffix()
-               : offlinePlayer.getPermissionEntity().getHighestPermissionGroup(CloudAPI.getInstance().getPermissionPool()).getSuffix();
+    public String getPlayerSuffix(final String world, final String player) {
+        final OfflinePlayer offlinePlayer = getPlayer(player);
+        if (offlinePlayer.getPermissionEntity().getSuffix() != null) {
+            return offlinePlayer.getPermissionEntity().getSuffix();
+        } else {
+            return PermissionProvider.getSuffix(offlinePlayer);
+        }
     }
 
     @Override
-    public void setPlayerSuffix(final String s, final String s1, final String s2) {
-        final OfflinePlayer offlinePlayer = getPlayer(s1);
-        offlinePlayer.getPermissionEntity().setSuffix(s2);
+    public void setPlayerSuffix(final String world, final String player, final String suffix) {
+        final OfflinePlayer offlinePlayer = getPlayer(player);
+        offlinePlayer.getPermissionEntity().setSuffix(suffix);
         update(offlinePlayer);
     }
 
     @Override
-    public String getGroupPrefix(final String s, final String s1) {
-        final PermissionGroup permissionGroup = CloudAPI.getInstance().getPermissionPool().getGroups().get(s1);
+    public String getGroupPrefix(final String world, final String group) {
+        final PermissionGroup permissionGroup = CloudAPI.getInstance().getPermissionPool().getGroups().get(group);
         if (permissionGroup != null) {
             return permissionGroup.getPrefix();
         } else {
@@ -67,17 +73,17 @@ public class VaultChatImpl extends Chat {
     }
 
     @Override
-    public void setGroupPrefix(final String s, final String s1, final String s2) {
-        final PermissionGroup permissionGroup = CloudAPI.getInstance().getPermissionPool().getGroups().get(s1);
+    public void setGroupPrefix(final String world, final String group, final String prefix) {
+        final PermissionGroup permissionGroup = CloudAPI.getInstance().getPermissionPool().getGroups().get(group);
         if (permissionGroup != null) {
-            permissionGroup.setPrefix(s2);
+            permissionGroup.setPrefix(prefix);
             CloudAPI.getInstance().updatePermissionGroup(permissionGroup);
         }
     }
 
     @Override
-    public String getGroupSuffix(final String s, final String s1) {
-        final PermissionGroup permissionGroup = CloudAPI.getInstance().getPermissionPool().getGroups().get(s1);
+    public String getGroupSuffix(final String world, final String group) {
+        final PermissionGroup permissionGroup = CloudAPI.getInstance().getPermissionPool().getGroups().get(group);
         if (permissionGroup != null) {
             return permissionGroup.getSuffix();
         } else {
@@ -86,91 +92,91 @@ public class VaultChatImpl extends Chat {
     }
 
     @Override
-    public void setGroupSuffix(final String s, final String s1, final String s2) {
-        final PermissionGroup permissionGroup = CloudAPI.getInstance().getPermissionPool().getGroups().get(s1);
+    public void setGroupSuffix(final String world, final String group, final String suffix) {
+        final PermissionGroup permissionGroup = CloudAPI.getInstance().getPermissionPool().getGroups().get(group);
         if (permissionGroup != null) {
-            permissionGroup.setSuffix(s2);
+            permissionGroup.setSuffix(suffix);
             CloudAPI.getInstance().updatePermissionGroup(permissionGroup);
         }
     }
 
     @Override
-    public int getPlayerInfoInteger(final String s, final String s1, final String s2, final int i) {
-        return 0;
+    public int getPlayerInfoInteger(final String world, final String player, final String node, final int defaultValue) {
+        return defaultValue;
     }
 
     @Override
-    public void setPlayerInfoInteger(final String s, final String s1, final String s2, final int i) {
-
-    }
-
-    @Override
-    public int getGroupInfoInteger(final String s, final String s1, final String s2, final int i) {
-        return 0;
-    }
-
-    @Override
-    public void setGroupInfoInteger(final String s, final String s1, final String s2, final int i) {
+    public void setPlayerInfoInteger(final String world, final String player, final String node, final int value) {
 
     }
 
     @Override
-    public double getPlayerInfoDouble(final String s, final String s1, final String s2, final double v) {
-        return 0;
+    public int getGroupInfoInteger(final String world, final String group, final String node, final int defaultValue) {
+        return defaultValue;
     }
 
     @Override
-    public void setPlayerInfoDouble(final String s, final String s1, final String s2, final double v) {
-
-    }
-
-    @Override
-    public double getGroupInfoDouble(final String s, final String s1, final String s2, final double v) {
-        return 0;
-    }
-
-    @Override
-    public void setGroupInfoDouble(final String s, final String s1, final String s2, final double v) {
+    public void setGroupInfoInteger(final String world, final String group, final String node, final int value) {
 
     }
 
     @Override
-    public boolean getPlayerInfoBoolean(final String s, final String s1, final String s2, final boolean b) {
-        return false;
+    public double getPlayerInfoDouble(final String world, final String player, final String node, final double defaultValue) {
+        return defaultValue;
     }
 
     @Override
-    public void setPlayerInfoBoolean(final String s, final String s1, final String s2, final boolean b) {
-
-    }
-
-    @Override
-    public boolean getGroupInfoBoolean(final String s, final String s1, final String s2, final boolean b) {
-        return false;
-    }
-
-    @Override
-    public void setGroupInfoBoolean(final String s, final String s1, final String s2, final boolean b) {
+    public void setPlayerInfoDouble(final String world, final String player, final String node, final double value) {
 
     }
 
     @Override
-    public String getPlayerInfoString(final String s, final String s1, final String s2, final String s3) {
-        return null;
+    public double getGroupInfoDouble(final String world, final String group, final String node, final double defaultValue) {
+        return defaultValue;
     }
 
     @Override
-    public void setPlayerInfoString(final String s, final String s1, final String s2, final String s3) {
+    public void setGroupInfoDouble(final String world, final String group, final String node, final double value) {
 
     }
 
     @Override
-    public String getGroupInfoString(final String s, final String s1, final String s2, final String s3) {
-        return null;
+    public boolean getPlayerInfoBoolean(final String world, final String player, final String node, final boolean defaultValue) {
+        return defaultValue;
     }
 
     @Override
-    public void setGroupInfoString(final String s, final String s1, final String s2, final String s3) {
+    public void setPlayerInfoBoolean(final String world, final String player, final String node, final boolean value) {
+
+    }
+
+    @Override
+    public boolean getGroupInfoBoolean(final String world, final String group, final String node, final boolean defaultValue) {
+        return defaultValue;
+    }
+
+    @Override
+    public void setGroupInfoBoolean(final String world, final String group, final String node, final boolean value) {
+
+    }
+
+    @Override
+    public String getPlayerInfoString(final String world, final String player, final String node, final String defaultValue) {
+        return defaultValue;
+    }
+
+    @Override
+    public void setPlayerInfoString(final String world, final String player, final String node, final String value) {
+
+    }
+
+    @Override
+    public String getGroupInfoString(final String world, final String group, final String node, final String defaultValue) {
+        return defaultValue;
+    }
+
+    @Override
+    public void setGroupInfoString(final String world, final String group, final String node, final String value) {
 
     }
 
